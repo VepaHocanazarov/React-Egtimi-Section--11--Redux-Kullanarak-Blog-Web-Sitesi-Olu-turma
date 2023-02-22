@@ -4,6 +4,11 @@ import { Link, useParams } from 'react-router-dom';
 
 class Post extends Component {
 
+    handleClick = ()=>{
+        this.props.deletepost(this.props.post.id);
+        this.props.history.push("/");
+    }
+
 
     render() {
 
@@ -11,10 +16,16 @@ class Post extends Component {
             <div className="post">
                 <h4 className='center'> {this.props.post.title} </h4>
                 <p> {this.props.post.body} </p>
+                <div className="center">
+                    <button className='btn grey' >Delete Post</button>
+                </div>
             </div>
         ) : (
             <div className="center">
                 Loading Post...
+                <div className="center">
+                    <button onClick={this.handleClick} className='btn grey' >Delete Post</button>
+                </div>
             </div>
         )
         return (
@@ -27,9 +38,9 @@ class Post extends Component {
     }
 }
 
-const mapStateToProps = (state,) => {
+const mapStateToProps = (state) => {
 
-    const {productId} = useParams();
+    let { productId } = useParams();
 
     return {
         post: state.posts.find(post => post.id === productId)
@@ -37,4 +48,13 @@ const mapStateToProps = (state,) => {
     }
 }
 
-export default connect(mapStateToProps)(Post);
+const mapdispatchToProps = (dispatch) => {
+
+    return {
+       
+        deletepost:(id) => dispatch({type:"delete_post",id:id})
+
+    }
+}
+
+export default connect(mapStateToProps,mapdispatchToProps)(Post);
